@@ -127,3 +127,6 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
 ## Contato
 
 Se você tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue ou entrar em contato.
+
+## Observação
+O deploy desta Api foi feita de maneira gratuita, então após 30 minutos sem movimentação na Api, o servidor é derrubado, então pode ser que demore de 3 a 5 minutos para que a Api retorne respostas as suas requisições.
