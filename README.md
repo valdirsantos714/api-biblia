@@ -1,7 +1,7 @@
 
 # API Bíblia
 
-Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, capítulos e versículos da bíblia. 
+Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, capítulos e versículos da bíblia. Abaixo, você encontrará instruções detalhadas de como executar o projeto localmente ou se preferir você pode testar a minha api clicando [aqui](http://biblia-api.onrender.com/) 
 ## Funcionalidades
 
 - **Listar Livros**: Obtenha a lista completa de livros da bíblia.
