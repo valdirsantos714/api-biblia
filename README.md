@@ -21,7 +21,7 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
 - **Java 17**: Certifique-se de ter o JDK 17 instalado.
 - **Maven**: Certifique-se de ter o Maven instalado.
 - **Clonar repositório do Script SQL da Bíblia**: Certifique-se de clonar e executar os scripts que estão neste [link](https://github.com/valdirsantos714/biblia-postgresql) em um banco de dados postgreSQL
-- **Modificar o arquivo `application-dev.properties`**: Substituir  a `{URL_DO_SEU_BANCO_DE_DADOS}` pelo caminho do seu banco de dados
+- **Modificar o arquivo `application-dev.properties`**: Substituir  o campo `{URL_DO_SEU_BANCO_DE_DADOS}` pelo caminho do seu banco de dados e o campo `{SUA_SENHA}` pela senha do seu banco de dados 
 
 ## Instalação
 
