@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: biblia
+  server:
+    port: ${SERVER_PORT:8080}
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    show-sql: ${SPRING_JPA_SHOW_SQL:false}
+    properties:
+      hibernate:
+        dialect: ${SPRING_JPA_HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
+        format_sql: ${SPRING_JPA_FORMAT_SQL:false}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/biblia_db}
+    username: ${SPRING_DATASOURCE_USERNAME:biblia_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:biblia_password}
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10000
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-enabled: true
+        recordExceptions:
+            - java.lang.Exception
+            - java.lang.RuntimeException
+    instances:
+      versiculosService:
+        config: default
+      livrosService:
+        config: default
+  retry:
+    configs:
+      default:
+        max-attempts: 3
+        wait-duration: 1000
+        retry-exceptions:
+          - java.lang.Exception
+          - java.lang.RuntimeException
+    instances:
+      versiculosService:
+        config: default
+      livrosService:
+        config: default
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 10s
+    instances:
+      versiculosService:
+        config: default
+      livrosService:
+        config: default
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,circuitbreakers,retries
