@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: biblia_db
+    environment:
+      POSTGRES_USER: biblia_user
+      POSTGRES_PASSWORD: biblia_password
+      POSTGRES_DB: biblia_db
+    ports:
+      - "5432:5432"
+    networks:
+      - biblia_network
+    restart: unless-stopped
+
+networks:
+  biblia_network:
+    driver: bridge
