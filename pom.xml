@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.valdirsantos714</groupId>
 	<artifactId>biblia</artifactId>
-	<version>v0.1.0</version>
+	<version>v0.1.1</version>
 	<name>demo</name>
 	<description>Bíblia API</description>
 	<properties>
