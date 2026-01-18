@@ -5,6 +5,7 @@ WORKDIR /app
 COPY pom.xml .
 
 COPY src ./src
+COPY biblia.sql .
 
 RUN mvn clean package -DskipTests
 
