@@ -1,0 +1,13 @@
+target/
+*.class
+*.jar
+.mvn/
+mvnw
+mvnw.cmd
+.git
+.gitignore
+README.md
+.idea/
+*.iml
+.DS_Store
+.env
