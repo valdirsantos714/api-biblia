@@ -13,15 +13,23 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
 
 - **Java 17**
 - **Spring Boot**
-- **Maven**
+- **Spring Cloud**
+- **Spring Data JPA**
+- **Spring Validation**
+- **Spring RestClient**
+- **Spring Actuator**
+- **Resilience4j** (Circuit Breaker)
 - **PostgreSQL**
+- **Lombok**
+- **Maven**
 
 ## Pré-requisitos
 
 - **Java 17**: Certifique-se de ter o JDK 17 instalado.
-- **Maven**: Certifique-se de ter o Maven instalado.
-- **Clonar repositório do Script SQL da Bíblia**: Certifique-se de clonar e executar os scripts que estão neste [link](https://github.com/valdirsantos714/biblia-postgresql) em um banco de dados postgreSQL
-- **Modificar o arquivo `application-dev.properties`**: Substituir  o campo `{URL_DO_SEU_BANCO_DE_DADOS}` pelo caminho do seu banco de dados e o campo `{SUA_SENHA}` pela senha do seu banco de dados 
+- **Maven**: Certifique-se de ter o Maven instalado (ou use o mvnw fornecido).
+- **PostgreSQL**: Banco de dados PostgreSQL em execução.
+- **Docker** (opcional): Para subir o banco de dados usando o comando ```docker compose up -d ``` .
+- **Configuração de variáveis de ambiente**: Atualize as credenciais de banco de dados no arquivo `application.yaml`. 
 
 ## Instalação
 
@@ -45,7 +53,10 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
 
 ## Uso
 
-1. Inicie a aplicação:
+1. Configure o banco de dados PostgreSQL e atualize as credenciais no arquivo `src/main/resources/application.yaml` ou suba o banco de dados usando o comando ```docker compose up -d```.
+
+
+2. Inicie a aplicação:
 
    ```bash
    mvn spring-boot:run
@@ -111,8 +122,9 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
 
 ## Estrutura do Projeto
 
-- `src/main/java/com/example/demo/`: Código fonte principal.
+- `src/main/java/com/valdirsantos714/biblia/`: Código fonte principal.
 - `src/main/resources/`: Arquivos de configuração.
+- `src/test/`: Testes automatizados.
 - `pom.xml`: Arquivo de configuração do Maven.
 
 ## Contribuição

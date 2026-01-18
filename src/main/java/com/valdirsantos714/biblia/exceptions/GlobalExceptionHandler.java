@@ -1,5 +1,6 @@
 package com.valdirsantos714.biblia.exceptions;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -21,6 +23,8 @@ public class GlobalExceptionHandler {
         response.put("message", ex.getMessage());
         response.put("path", "");
 
+        log.error("Método handleRuntimeException do GlobalExceptionHandler sendo executado: {}", ex.getMessage());
+        log.error("Response do handleRuntimeException: {}", response);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -33,6 +37,8 @@ public class GlobalExceptionHandler {
         response.put("message", ex.getMessage());
         response.put("path", "");
 
+        log.error("Método handleGenericException do GlobalExceptionHandler sendo executado: {}", ex.getMessage());
+        log.error("Response do handleGenericException: {}", response);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
