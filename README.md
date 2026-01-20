@@ -13,11 +13,11 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
 
 - **Java 17**
 - **Spring Boot**
-- **Spring Cloud**
 - **Spring Data JPA**
 - **Spring Validation**
 - **Spring RestClient**
 - **Spring Actuator**
+- **Swagger (SpringDoc OpenAPI)**
 - **Resilience4j** (Circuit Breaker)
 - **PostgreSQL**
 - **Lombok**
@@ -67,57 +67,299 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
    ```
    http://localhost:8080
    ```
+   
+### Versões da Bíblia incluídas
+ - Nova Versão Transformadora (NVT)
+ - Almeida Revista e Atualizada (ARA)
+ - Nova Versão Internacional (NVI)
+ - Nova Tradução na Linguagem de Hoje (NTLH)
 
 ### Endpoints
 
-- **Listar Livros**
+#### Livros - `/livros`
+
+- **Listar todos os livros**
     - **GET** `/livros/all`
-    - **Resposta**:
+    - **Descrição**: Retorna uma lista completa de todos os livros bíblicos disponíveis
+    - **Resposta (200)**:
       ```json
       [
         {
-          "id": 18,
-          "nome": "Salmos"
+          "id": 0,
+          "nome": "Gênesis",
+          "abreviacao": "gn",
+          "testamento": {
+            "id": 1,
+            "nome": "Velho Testamento"
+          }
         },
-        ...
+        {
+          "id": 1,
+          "nome": "Êxodo",
+          "abreviacao": "ex",
+          "testamento": {
+            "id": 1,
+            "nome": "Velho Testamento"
+          }
+        }
       ]
       ```
 
-- **Listar Capítulos**
-    - **GET** `/livros/{idLivro}`
-    - **Parâmetros**: `idLivro` - ID do livro
-    - **Resposta**:
-      ```json
-      [
-        1,2,3,4,5 ...
-      ]
-      ```
-
-- **Listar Quantidade de Versículos**
-    - **GET** `/livros/{livroId}/{idCapitulo}/verNumeroDeVersos`
-    - **Parâmetros**: `livroId` - ID do livro, `idCapitulo` - ID do capítulo
-    - **Resposta**:
-      ```json
-      [
-        1,2,3,4,5 ...
-      ]
-      ```
-
-- **Listar Versículos**
-    - **GET** `/livros/{livroId}/{idCapitulo}`
-    - **Parâmetros**: `livroId` - ID do livro, `idCapitulo` - ID do capítulo
-    - **Resposta**:
+- **Buscar versos por ID do livro e capítulo**
+    - **GET** `/livros/{id_livro}/{capitulo}`
+    - **Parâmetros**: 
+      - `id_livro` - ID único do livro bíblico (ex: 1)
+      - `capitulo` - Número do capítulo (ex: 1)
+    - **Descrição**: Retorna todos os versos de um capítulo específico na versão padrão (NVT)
+    - **Resposta (200)**:
       ```json
       [
         {
+          "id": 1,
+          "versao": {
+            "id": 2,
+            "nome": "nvt"
+          },
+          "livro": {
+            "id": 0,
+            "nome": "Gênesis",
+            "abreviacao": "gn",
+            "testamento": {
+              "id": 1,
+              "nome": "Velho Testamento"
+            }
+          },
+          "capitulo": 1,
+          "versiculo": 1,
+          "texto": "No princípio, criou Deus os céus e a terra.",
+          "testamento": 1,
+      ...
+        } 
+      ]
+      ```
 
+- **Buscar versos por nome do livro e capítulo**
+    - **GET** `/livros/buscarPorNome/{nomeLivro}/{capitulo}`
+    - **Parâmetros**: 
+      - `nomeLivro` - Nome completo ou abreviação do livro (ex: Gênesis)
+      - `capitulo` - Número do capítulo (ex: 1)
+    - **Descrição**: Retorna todos os versos de um capítulo específico identificando o livro pelo nome, na versão padrão (NVT)
+    - **Resposta (200)**:
+      ```json
+      [
+        {
+          "id": 1,
+          "versao": {
+            "id": 2,
+            "nome": "nvt"
+          },
+          "livro": {
+            "id": 0,
+            "nome": "Gênesis",
+            "abreviacao": "gn",
+            "testamento": {
+              "id": 1,
+              "nome": "Velho Testamento"
+            }
+          },
+          "capitulo": 1,
+          "versiculo": 1,
+          "texto": "No princípio, criou Deus os céus e a terra.",
+          "testamento": 1,
+      ...
+        }
+      ]
+      ```
+
+- **Buscar números de versos por ID do livro e capítulo**
+    - **GET** `/livros/{livro}/{capitulo}/verNumeroDeVersos`
+    - **Parâmetros**: 
+      - `livro` - ID único do livro bíblico (ex: 1)
+      - `capitulo` - Número do capítulo (ex: 1)
+    - **Descrição**: Retorna uma lista com os números dos versos existentes em um capítulo específico
+    - **Resposta (200)**:
+      ```json
+      [1, 2, 3, 4, 5, ..., 31]
+      ```
+
+- **Buscar versos por versão bíblica**
+    - **GET** `/livros/{nomeVersao}/{id_livro}/{capitulo}`
+    - **Parâmetros**: 
+      - `nomeVersao` - Nome da versão bíblica (ex: acf, kjv, nvt)
+      - `id_livro` - ID único do livro bíblico (ex: 1)
+      - `capitulo` - Número do capítulo (ex: 1)
+    - **Descrição**: Retorna versos de um capítulo específico em uma versão bíblica escolhida
+    - **Resposta (200)**:
+      ```json
+      [
+        {
+          "id": 1,
+          "versao": {
+            "id": 2,
+            "nome": "nvt"
+          },
+          "livro": {
+            "id": 0,
+            "nome": "Gênesis",
+            "abreviacao": "gn",
+            "testamento": {
+              "id": 1,
+              "nome": "Velho Testamento"
+            }
+          },
+          "capitulo": 1,
+          "versiculo": 1,
+          "texto": "No princípio, criou Deus os céus e a terra.",
+          "testamento": 1,
+      ...
+        }
+      ]
+      ```
+
+- **Busca detalhada por nome de livro e versão**
+    - **GET** `/livros/buscaDetalhada/{nomeVersao}/{livro}/{capitulo}`
+    - **Parâmetros**: 
+      - `nomeVersao` - Nome da versão bíblica (ex: acf, kjv, nvt)
+      - `livro` - Nome completo ou abreviação do livro (ex: Gênesis)
+      - `capitulo` - Número do capítulo (ex: 1)
+    - **Descrição**: Retorna versos de um capítulo específico buscando o livro pelo nome e escolhendo uma versão bíblica
+    - **Resposta (200)**:
+      ```json
+      [
+        {
+          "id": 1,
+          "versao": {
+            "id": 2,
+            "nome": "nvt"
+          },
+          "livro": {
+            "id": 0,
+            "nome": "Gênesis",
+            "abreviacao": "gn",
+            "testamento": {
+              "id": 1,
+              "nome": "Velho Testamento"
+            }
+          },
+          "capitulo": 1,
+          "versiculo": 1,
+          "texto": "No princípio, criou Deus os céus e a terra.",
+          "testamento": 1,
+      ...
+        }
+      ]
+      ```
+
+#### Versículos do Dia - `/versiculos`
+
+- **Listar todos os versículos do dia**
+    - **GET** `/versiculos/all`
+    - **Descrição**: Retorna uma lista completa de todos os versículos do dia cadastrados no sistema
+    - **Resposta (200)**:
+      ```json
+      [
+        {
+          "id": 1,
+          "verso": {
+            "id": 1,
+            "capitulo": 3,
+            "versiculo": 16,
+            "texto": "Porque Deus tanto amou o mundo que deu o seu Filho Unigênito, para que todo o que nele crer não pereça, mas tenha a vida eterna.",
+            "testamento": 2,
+            "versao": {
+              "id": 1,
+              "nome": "NVT"
+            },
+            "livro": {
+              "id": 43,
+              "nome": "João",
+              "abreviacao": "Jo",
+              "testamento": {
+                "id": 2,
+                "nome": "Novo Testamento"
+              }
+            }
+          }
+        }
+      ]
+      ```
+
+- **Buscar versículo do dia por ID**
+    - **GET** `/versiculos/{id}`
+    - **Parâmetros**: 
+      - `id` - ID único do versículo do dia (ex: 1)
+    - **Descrição**: Retorna um versículo específico do dia identificado por seu ID
+    - **Resposta (200)**:
+      ```json
+      {
+        "id": 1,
+        "verso": {
+          "id": 1,
           "capitulo": 3,
           "versiculo": 16,
           "texto": "Porque Deus tanto amou o mundo que deu o seu Filho Unigênito, para que todo o que nele crer não pereça, mas tenha a vida eterna.",
-          ...
-        },
-      ]
+          "testamento": 2,
+          "versao": {
+            "id": 1,
+            "nome": "NVT"
+          },
+          "livro": {
+            "id": 43,
+            "nome": "João",
+            "abreviacao": "Jo",
+            "testamento": {
+              "id": 2,
+              "nome": "Novo Testamento"
+            }
+          }
+        }
+      }
       ```
+
+- **Criar novo versículo do dia**
+    - **POST** `/versiculos`
+    - **Descrição**: Cria um novo versículo do dia e o persiste no banco de dados
+    - **Corpo da Requisição**:
+      ```json
+      {
+        "verso": {
+          "id": 1
+        }
+      }
+      ```
+    - **Resposta (201)**:
+      ```json
+      {
+        "id": 1,
+        "verso": {
+          "id": 1,
+          "capitulo": 3,
+          "versiculo": 16,
+          "texto": "Porque Deus tanto amou o mundo que deu o seu Filho Unigênito, para que todo o que nele crer não pereça, mas tenha a vida eterna.",
+          "testamento": 2,
+          "versao": {
+            "id": 1,
+            "nome": "NVT"
+          },
+          "livro": {
+            "id": 43,
+            "nome": "João",
+            "abreviacao": "Jo",
+            "testamento": {
+              "id": 2,
+              "nome": "Novo Testamento"
+            }
+          }
+        }
+      }
+      ```
+
+## Documentação da API
+
+A documentação interativa da API está disponível via Swagger/OpenAPI:
+
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
+- **OpenAPI JSON**: http://localhost:8080/v3/api-docs
 
 
 ## Estrutura do Projeto
@@ -126,6 +368,10 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
 - `src/main/resources/`: Arquivos de configuração.
 - `src/test/`: Testes automatizados.
 - `pom.xml`: Arquivo de configuração do Maven.
+- `biblia.sql`: Script SQL para popular o banco de dados com os dados da bíblia nas versões mencionadas acima.
+- `docker-compose.yml`: Arquivo para subir o banco de dados PostgreSQL via Docker.
+- `Dockerfile`: Arquivo para criar a imagem Docker da aplicação.
+- `src/main/resources/application.yaml`: Arquivo de configuração da aplicação Spring Boot.
 
 ## Contribuição
 

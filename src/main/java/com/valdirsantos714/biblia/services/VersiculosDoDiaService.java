@@ -16,57 +16,57 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class VersiculosService {
+public class VersiculosDoDiaService {
 
     @Autowired
     private VersiculosRepository VersiculoDoDiaRepository;
 
-    @CircuitBreaker(name = "versiculosService", fallbackMethod = "findAllFallback")
-    @Retry(name = "versiculosService")
+    @CircuitBreaker(name = "versiculoDoDiaService", fallbackMethod = "findAllFallback")
+    @Retry(name = "versiculoDoDiaService")
     public List<VersiculoDoDia> findAll() {
-        log.info("Executando método findAll() em VersiculosService");
+        log.info("Executando método findAll() em VersiculosDoDiaService");
         List<VersiculoDoDia> lista = VersiculoDoDiaRepository.findAll();
         return lista;
     }
 
     public List<VersiculoDoDia> findAllFallback(Exception e) {
-        log.warn("Método findAllFallback em VersiculosService sendo executado");
+        log.warn("Método findAllFallback em VersiculosDoDiaService sendo executado");
         return List.of();
     }
 
-    @CircuitBreaker(name = "versiculosService", fallbackMethod = "findByIdFallback")
-    @Retry(name = "versiculosService")
+    @CircuitBreaker(name = "versiculoDoDiaService", fallbackMethod = "findByIdFallback")
+    @Retry(name = "versiculoDoDiaService")
     public VersiculoDoDia findById(Long id) {
-        log.info("Executando método findById() em VersiculosService para id: {}", id);
+        log.info("Executando método findById() em VersiculosDoDiaService para id: {}", id);
 
         Optional<VersiculoDoDia> VersiculoDoDia = VersiculoDoDiaRepository.findById(id);
         return VersiculoDoDia.orElseThrow(() -> new RuntimeException("Erro"));
     }
 
     public VersiculoDoDia findByIdFallback(Long id, Exception e) {
-        log.info("Método findByIdFallback em VersiculosService sendo executado");
+        log.info("Método findByIdFallback em VersiculosDoDiaService sendo executado");
         throw new RuntimeException("Serviço indisponível. Não foi possível encontrar o versículo com id: " + id);
     }
 
-    @CircuitBreaker(name = "versiculosService", fallbackMethod = "saveFallback")
-    @Retry(name = "versiculosService")
+    @CircuitBreaker(name = "versiculoDoDiaService", fallbackMethod = "saveFallback")
+    @Retry(name = "versiculoDoDiaService")
     @Transactional
     public VersiculoDoDia save (VersiculoDoDia VersiculoDoDiaDto) {
-        log.info("Executando método save() em VersiculosService com o versículo: {}", VersiculoDoDiaDto);
+        log.info("Executando método save() em VersiculosDoDiaService com o versículo: {}", VersiculoDoDiaDto);
         return VersiculoDoDiaRepository.save(VersiculoDoDiaDto);
     }
 
     public VersiculoDoDia saveFallback(VersiculoDoDia VersiculoDoDiaDto, Exception e) {
-        log.info("Método saveFallback em VersiculosService sendo executado");
+        log.info("Método saveFallback em VersiculosDoDiaService sendo executado");
         throw new RuntimeException("Serviço indisponível. Não foi possível salvar o versículo");
     }
 
-    @CircuitBreaker(name = "versiculosService", fallbackMethod = "deleteFallback")
-    @Retry(name = "versiculosService")
+    @CircuitBreaker(name = "versiculoDoDiaService", fallbackMethod = "deleteFallback")
+    @Retry(name = "versiculoDoDiaService")
     @Transactional
     public void delete(Long id) {
         try {
-            log.info("Executando método delete() em VersiculosService para id: {}", id);
+            log.info("Executando método delete() em VersiculosDoDiaService para id: {}", id);
             VersiculoDoDiaRepository.deleteById(id);
 
         } catch (EmptyResultDataAccessException e) {
@@ -77,7 +77,7 @@ public class VersiculosService {
     }
 
     public void deleteFallback(Long id, Exception e) {
-        log.info("Método deleteFallback em VersiculosService sendo executado");
+        log.info("Método deleteFallback em VersiculosDoDiaService sendo executado");
         throw new RuntimeException("Serviço indisponível. Não foi possível deletar o versículo com id: " + id);
     }
 }

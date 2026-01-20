@@ -32,9 +32,11 @@ resilience4j:
             - java.lang.Exception
             - java.lang.RuntimeException
     instances:
-      versiculosService:
+      versiculoDoDiaService:
         config: default
       livrosService:
+        config: default
+      versosService:
         config: default
   retry:
     configs:
@@ -45,18 +47,22 @@ resilience4j:
           - java.lang.Exception
           - java.lang.RuntimeException
     instances:
-      versiculosService:
+      versiculoDoDiaService:
         config: default
       livrosService:
+        config: default
+      versosService:
         config: default
   timelimiter:
     configs:
       default:
         timeout-duration: 10s
     instances:
-      versiculosService:
+      versiculoDoDiaService:
         config: default
       livrosService:
+        config: default
+      versosService:
         config: default
 
 management:

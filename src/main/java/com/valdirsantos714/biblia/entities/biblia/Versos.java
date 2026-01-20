@@ -43,6 +43,4 @@ public class Versos {
     @JsonIgnore
     @OneToMany(mappedBy = "verso")
     private Set<VersiculoDoDia> versiculosDoDia = new HashSet<>();
-
-
 }
