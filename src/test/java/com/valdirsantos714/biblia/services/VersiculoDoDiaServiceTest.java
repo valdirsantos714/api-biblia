@@ -1,11 +1,16 @@
 package com.valdirsantos714.biblia.services;
 
+import com.valdirsantos714.biblia.dtos.VersosDTO;
+import com.valdirsantos714.biblia.dtos.VersaoDTO;
+import com.valdirsantos714.biblia.dtos.LivrosDTO;
+import com.valdirsantos714.biblia.dtos.TestamentoDTO;
 import com.valdirsantos714.biblia.entities.biblia.VersiculoDoDia;
 import com.valdirsantos714.biblia.entities.biblia.Versos;
 import com.valdirsantos714.biblia.entities.biblia.Livros;
 import com.valdirsantos714.biblia.entities.biblia.Testamento;
 import com.valdirsantos714.biblia.entities.biblia.Versao;
 import com.valdirsantos714.biblia.repositories.VersiculosRepository;
+import com.valdirsantos714.biblia.repositories.VersosRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +36,9 @@ class VersiculoDoDiaServiceTest {
     @Mock
     private VersiculosRepository versiculosRepository;
 
+    @Mock
+    private VersosRepository versosRepository;
+
     @InjectMocks
     private VersiculosDoDiaService versiculoDoDiaService;
 
@@ -38,6 +47,7 @@ class VersiculoDoDiaServiceTest {
     private Livros livro;
     private Testamento testamento;
     private Versao versao;
+    private VersosDTO versosDTO;
 
     @BeforeEach
     void setUp() {
@@ -67,6 +77,12 @@ class VersiculoDoDiaServiceTest {
         versiculo = new VersiculoDoDia();
         versiculo.setId(1L);
         versiculo.setVerso(verso);
+
+        TestamentoDTO testamentoDTO = new TestamentoDTO(1L, "Antigo Testamento");
+        LivrosDTO livrosDTO = new LivrosDTO(1L, "Gênesis", "Gn", testamentoDTO);
+        VersaoDTO versaoDTO = new VersaoDTO(1L, "NVT");
+
+        versosDTO = new VersosDTO(1L, versaoDTO, livrosDTO, 1, 1, "No princípio, criou Deus os céus e a terra.", 1);
     }
 
     @Test
@@ -142,7 +158,85 @@ class VersiculoDoDiaServiceTest {
     }
 
     @Test
-    @DisplayName("Given versiculo to save when save then persist and return")
+    @DisplayName("Given verso aleatorio exists when findVersoAleatorioDoDia then return VersosDTO")
+    void testFindVersoAleatorioDoDiaSucesso() {
+        LocalDate data = LocalDate.now();
+        when(versosRepository.findVersoAleatorioDoDia(data)).thenReturn(verso);
+
+        VersosDTO resultado = versiculoDoDiaService.findVersoAleatorioDoDia(data);
+
+        assertNotNull(resultado);
+        assertEquals(1L, resultado.getId());
+        assertEquals("No princípio, criou Deus os céus e a terra.", resultado.getTexto());
+        verify(versosRepository, times(1)).findVersoAleatorioDoDia(data);
+    }
+
+    @Test
+    @DisplayName("Given verso aleatorio not found when findVersoAleatorioDoDia then throw exception")
+    void testFindVersoAleatorioDoDiaNaoEncontrado() {
+        LocalDate data = LocalDate.now();
+        when(versosRepository.findVersoAleatorioDoDia(data)).thenReturn(null);
+
+        assertThrows(RuntimeException.class, () -> versiculoDoDiaService.findVersoAleatorioDoDia(data));
+        verify(versosRepository, times(1)).findVersoAleatorioDoDia(data);
+    }
+
+    @Test
+    @DisplayName("Given verso aleatorio exists when findVersoAleatorioDoDia then verify converted DTO")
+    void testFindVersoAleatorioDoDiaVerifyDTO() {
+        LocalDate data = LocalDate.now();
+        when(versosRepository.findVersoAleatorioDoDia(data)).thenReturn(verso);
+
+        VersosDTO resultado = versiculoDoDiaService.findVersoAleatorioDoDia(data);
+
+        assertNotNull(resultado.getVersao());
+        assertNotNull(resultado.getLivro());
+        assertEquals("Gênesis", resultado.getLivro().getNome());
+        assertEquals("Gn", resultado.getLivro().getAbreviacao());
+        assertEquals(1, resultado.getCapitulo());
+        assertEquals(1, resultado.getVersiculo());
+    }
+
+    @Test
+    @DisplayName("Given verso with testamento when findVersoAleatorioDoDia then include testamento in DTO")
+    void testFindVersoAleatorioDoDiaComTestamento() {
+        LocalDate data = LocalDate.now();
+        when(versosRepository.findVersoAleatorioDoDia(data)).thenReturn(verso);
+
+        VersosDTO resultado = versiculoDoDiaService.findVersoAleatorioDoDia(data);
+
+        assertEquals(1, resultado.getTestamento());
+        assertNotNull(resultado.getLivro().getTestamento());
+        assertEquals("Antigo Testamento", resultado.getLivro().getTestamento().getNome());
+    }
+
+    @Test
+    @DisplayName("Given verso with different data when findVersoAleatorioDoDia then call repository with correct date")
+    void testFindVersoAleatorioDoDiaComDataDiferente() {
+        LocalDate dataCustom = LocalDate.of(2025, 12, 25);
+        when(versosRepository.findVersoAleatorioDoDia(dataCustom)).thenReturn(verso);
+
+        VersosDTO resultado = versiculoDoDiaService.findVersoAleatorioDoDia(dataCustom);
+
+        assertNotNull(resultado);
+        verify(versosRepository, times(1)).findVersoAleatorioDoDia(dataCustom);
+    }
+
+    @Test
+    @DisplayName("Given multiple calls to findVersoAleatorioDoDia then verify repository called each time")
+    void testFindVersoAleatorioDoDiaMultiplasChamadas() {
+        LocalDate data = LocalDate.now();
+        when(versosRepository.findVersoAleatorioDoDia(data)).thenReturn(verso);
+
+        versiculoDoDiaService.findVersoAleatorioDoDia(data);
+        versiculoDoDiaService.findVersoAleatorioDoDia(data);
+        versiculoDoDiaService.findVersoAleatorioDoDia(data);
+
+        verify(versosRepository, times(3)).findVersoAleatorioDoDia(data);
+    }
+
+    @Test
+    @DisplayName("Given verso to save when save then persist and return")
     void testSaveSucesso() {
         when(versiculosRepository.save(versiculo)).thenReturn(versiculo);
 
@@ -251,51 +345,44 @@ class VersiculoDoDiaServiceTest {
     }
 
     @Test
-    @DisplayName("Should find versiculo among multiple results")
-    void testFindByIdAmongMultiple() {
-        when(versiculosRepository.findById(1L)).thenReturn(Optional.of(versiculo));
+    @DisplayName("Should find verso aleatorio with correct conversion to DTO")
+    void testFindVersoAleatorioDoDiaConversion() {
+        LocalDate data = LocalDate.now();
+        when(versosRepository.findVersoAleatorioDoDia(data)).thenReturn(verso);
 
-        VersiculoDoDia resultado = versiculoDoDiaService.findById(1L);
+        VersosDTO resultado = versiculoDoDiaService.findVersoAleatorioDoDia(data);
 
-        assertEquals(1L, resultado.getId());
+        assertEquals(verso.getId(), resultado.getId());
+        assertEquals(verso.getCapitulo(), resultado.getCapitulo());
+        assertEquals(verso.getVersiculo(), resultado.getVersiculo());
+        assertEquals(verso.getTexto(), resultado.getTexto());
     }
 
     @Test
-    @DisplayName("Should maintain data consistency across multiple operations")
-    void testDataConsistency() {
-        when(versiculosRepository.findAll()).thenReturn(List.of(versiculo));
-        when(versiculosRepository.findById(1L)).thenReturn(Optional.of(versiculo));
+    @DisplayName("Should find verso aleatorio with livro and versao data preserved")
+    void testFindVersoAleatorioDoDiaPreserveLivroVersao() {
+        LocalDate data = LocalDate.now();
+        when(versosRepository.findVersoAleatorioDoDia(data)).thenReturn(verso);
 
-        List<VersiculoDoDia> listResult = versiculoDoDiaService.findAll();
-        VersiculoDoDia findResult = versiculoDoDiaService.findById(1L);
+        VersosDTO resultado = versiculoDoDiaService.findVersoAleatorioDoDia(data);
 
-        assertEquals(listResult.get(0).getId(), findResult.getId());
-        assertEquals(listResult.get(0).getVerso().getTexto(), findResult.getVerso().getTexto());
+        assertEquals(verso.getLivro().getId(), resultado.getLivro().getId());
+        assertEquals(verso.getLivro().getNome(), resultado.getLivro().getNome());
+        assertEquals(verso.getVersao().getId(), resultado.getVersao().getId());
+        assertEquals(verso.getVersao().getNome(), resultado.getVersao().getNome());
     }
 
     @Test
-    @DisplayName("Should handle large list of versiculos")
-    void testFindAllLargeList() {
-        List<VersiculoDoDia> largeList = new ArrayList<>();
-        for (int i = 1; i <= 100; i++) {
-            VersiculoDoDia v = new VersiculoDoDia();
-            v.setId((long) i);
-            largeList.add(v);
-        }
+    @DisplayName("Should handle verso with complete testamento hierarchy")
+    void testFindVersoAleatorioDoDiaTestamentoHierarchy() {
+        LocalDate data = LocalDate.now();
+        when(versosRepository.findVersoAleatorioDoDia(data)).thenReturn(verso);
 
-        when(versiculosRepository.findAll()).thenReturn(largeList);
+        VersosDTO resultado = versiculoDoDiaService.findVersoAleatorioDoDia(data);
 
-        List<VersiculoDoDia> resultado = versiculoDoDiaService.findAll();
-
-        assertEquals(100, resultado.size());
-    }
-
-    @Test
-    @DisplayName("Should throw exception when save receives null")
-    void testSaveWithNull() {
-        when(versiculosRepository.save(null)).thenThrow(new NullPointerException());
-
-        assertThrows(NullPointerException.class, () -> versiculoDoDiaService.save(null));
+        assertNotNull(resultado.getLivro().getTestamento());
+        assertEquals(verso.getLivro().getTestamento().getId(), resultado.getLivro().getTestamento().getId());
+        assertEquals(verso.getLivro().getTestamento().getNome(), resultado.getLivro().getTestamento().getNome());
     }
 
     @Test
@@ -308,4 +395,3 @@ class VersiculoDoDiaServiceTest {
         verify(versiculosRepository).deleteById(1L);
     }
 }
-

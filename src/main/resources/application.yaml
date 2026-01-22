@@ -38,6 +38,8 @@ resilience4j:
         config: default
       versosService:
         config: default
+      versaoService:
+        config: default
   retry:
     configs:
       default:
@@ -53,6 +55,9 @@ resilience4j:
         config: default
       versosService:
         config: default
+      versaoService:
+        config: default
+
   timelimiter:
     configs:
       default:
@@ -63,6 +68,8 @@ resilience4j:
       livrosService:
         config: default
       versosService:
+        config: default
+      versaoService:
         config: default
 
 management:

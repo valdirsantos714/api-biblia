@@ -153,4 +153,22 @@ public interface VersosRepository extends JpaRepository<Versos, Long> {
     List<Integer> findDistinctCapitulosByLivroNomeOuAbreviacao(
             @Param("livro") String livro
     );
+
+    @Query(value = """
+        SELECT v.id, v.id_versao, v.id_livro, v.capitulo, v.versiculo, v.texto, v.testamento
+        FROM versos v
+        JOIN versao_biblia ver ON v.id_versao = ver.id
+        WHERE LOWER(ver.nome) = 'nvt'
+        ORDER BY v.id
+        OFFSET (
+            ABS(EXTRACT(EPOCH FROM CAST(:data AS timestamp))::bigint) % (
+                SELECT COUNT(*) FROM versos v_count
+                JOIN versao_biblia ver_count ON v_count.id_versao = ver_count.id
+                WHERE LOWER(ver_count.nome) = 'nvt'
+            )
+        )
+        LIMIT 1
+        """, nativeQuery = true)
+    Versos findVersoAleatorioDoDia(@Param("data") java.time.LocalDate data);
 }
+
