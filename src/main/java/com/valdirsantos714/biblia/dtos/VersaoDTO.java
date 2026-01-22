@@ -13,7 +13,7 @@ public class VersaoDTO {
     @Schema(description = "Identificador único da versão", example = "1")
     private Long id;
 
-    @Schema(description = "Nome ou sigla da versão bíblica", example = "NVT")
+    @Schema(description = "Sigla da versão bíblica", example = "NVT")
     private String nome;
 }
 

@@ -28,7 +28,7 @@ public class VersosDTO {
     @Schema(description = "Texto completo do verso", example = "No princípio, criou Deus os céus e a terra.")
     private String texto;
 
-    @Schema(description = "Identificador do testamento (1=Antigo Testamento, 2=Novo Testamento)", example = "1")
+    @Schema(description = "Identificador do testamento (1=Velho Testamento, 2=Novo Testamento)", example = "1")
     private Integer testamento;
 }
 

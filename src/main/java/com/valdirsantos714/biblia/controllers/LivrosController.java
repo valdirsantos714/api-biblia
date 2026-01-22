@@ -44,7 +44,7 @@ public class LivrosController {
     }
 
     @GetMapping("/{id_livro}/{capitulo}")
-    @Operation(summary = "Buscar versos por ID do livro e capítulo", description = "Retorna todos os versos de um capítulo específico de um livro identificado pelo ID, na versão padrão (NVT)")
+    @Operation(summary = "Buscar versos por ID do livro e capítulo na versão padrão NVT", description = "Retorna todos os versos de um capítulo específico de um livro identificado pelo ID, na versão padrão (NVT)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Versos encontrados com sucesso"),
             @ApiResponse(responseCode = "404", description = "Livro ou capítulo não encontrado")
@@ -60,7 +60,7 @@ public class LivrosController {
     }
 
     @GetMapping("/buscarPorNome/{nomeLivro}/{capitulo}")
-    @Operation(summary = "Buscar versos por nome do livro e capítulo", description = "Retorna todos os versos de um capítulo específico identificando o livro pelo nome, na versão padrão (NVT)")
+    @Operation(summary = "Buscar versos por nome do livro e capítulo na versão padrão NVT", description = "Retorna todos os versos de um capítulo específico identificando o livro pelo nome, na versão padrão (NVT)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Versos encontrados com sucesso"),
             @ApiResponse(responseCode = "404", description = "Livro ou capítulo não encontrado")
@@ -100,7 +100,7 @@ public class LivrosController {
     }
 
     @GetMapping("/{nomeVersao}/{id_livro}/{capitulo}")
-    @Operation(summary = "Buscar versos por versão bíblica", description = "Retorna versos de um capítulo específico em uma versão bíblica escolhida (ex: acf, kjv, nvt)")
+    @Operation(summary = "Buscar versos de um capítulo por versão bíblica e id do livro", description = "Retorna versos de um capítulo específico em uma versão bíblica escolhida (ex: acf, kjv, nvt)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Versos encontrados com sucesso"),
             @ApiResponse(responseCode = "404", description = "Livro, capítulo ou versão não encontrado")
@@ -124,7 +124,7 @@ public class LivrosController {
     }
 
     @GetMapping("/buscaDetalhada/{nomeVersao}/{livro}/{capitulo}")
-    @Operation(summary = "Busca detalhada por nome de livro e versão", description = "Retorna versos de um capítulo específico buscando o livro pelo nome e escolhendo uma versão bíblica")
+    @Operation(summary = "Busca detalhada de versos por nome de livro e versão", description = "Retorna versos de um capítulo específico buscando o livro pelo nome e escolhendo uma versão bíblica")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Versos encontrados com sucesso"),
             @ApiResponse(responseCode = "404", description = "Livro, capítulo ou versão não encontrado")
