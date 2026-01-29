@@ -73,6 +73,11 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
  - Almeida Revista e Atualizada (ARA)
  - Nova Versão Internacional (NVI)
  - Nova Tradução na Linguagem de Hoje (NTLH)
+ - Almeida Corrigida e Fiel (ACF)
+ - Almeida Revista e Corrigida (ARC)
+ - King James Atualizada (KJA)
+ - Nova Almeida Atualizada (NAA)
+ - Nova Bíblia Viva (NBV)
 
 ### Endpoints
 
@@ -81,11 +86,11 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
 - **Listar todos os livros**
     - **GET** `/livros/all`
     - **Descrição**: Retorna uma lista completa de todos os livros bíblicos disponíveis
-    - **Resposta (200)**:
+    - **Exemplo de Resposta**:
       ```json
       [
         {
-          "id": 0,
+          "id": 1,
           "nome": "Gênesis",
           "abreviacao": "gn",
           "testamento": {
@@ -94,7 +99,7 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
           }
         },
         {
-          "id": 1,
+          "id": 2,
           "nome": "Êxodo",
           "abreviacao": "ex",
           "testamento": {
@@ -111,7 +116,7 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
       - `id_livro` - ID único do livro bíblico (ex: 1)
       - `capitulo` - Número do capítulo (ex: 1)
     - **Descrição**: Retorna todos os versos de um capítulo específico na versão padrão (NVT)
-    - **Resposta (200)**:
+    - **Exemplo de Resposta**:
       ```json
       [
         {
@@ -121,7 +126,7 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
             "nome": "nvt"
           },
           "livro": {
-            "id": 0,
+            "id": 1,
             "nome": "Gênesis",
             "abreviacao": "gn",
             "testamento": {
@@ -134,7 +139,7 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
           "texto": "No princípio, criou Deus os céus e a terra.",
           "testamento": 1,
       ...
-        } 
+        }
       ]
       ```
 
@@ -144,7 +149,7 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
       - `nomeLivro` - Nome completo ou abreviação do livro (ex: Gênesis)
       - `capitulo` - Número do capítulo (ex: 1)
     - **Descrição**: Retorna todos os versos de um capítulo específico identificando o livro pelo nome, na versão padrão (NVT)
-    - **Resposta (200)**:
+    - **Exemplo de Resposta (200)**:
       ```json
       [
         {
@@ -154,7 +159,7 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
             "nome": "nvt"
           },
           "livro": {
-            "id": 0,
+            "id": 1,
             "nome": "Gênesis",
             "abreviacao": "gn",
             "testamento": {
@@ -177,19 +182,29 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
       - `livro` - ID único do livro bíblico (ex: 1)
       - `capitulo` - Número do capítulo (ex: 1)
     - **Descrição**: Retorna uma lista com os números dos versos existentes em um capítulo específico
-    - **Resposta (200)**:
+    - **Exemplo de Resposta**:
       ```json
       [1, 2, 3, 4, 5, ..., 31]
+      ```
+
+- **Listar capítulos de um livro**
+    - **GET** `/livros/{nomeLivro}/capitulos`
+    - **Parâmetros**: 
+      - `nomeLivro` - Nome completo ou abreviação do livro (ex: Gênesis, Gn)
+    - **Descrição**: Retorna uma lista com todos os números de capítulos disponíveis para um livro específico
+    - **Exemplo de Resposta**:
+      ```json
+      [1, 2, 3, 4, ..., 50]
       ```
 
 - **Buscar versos por versão bíblica**
     - **GET** `/livros/{nomeVersao}/{id_livro}/{capitulo}`
     - **Parâmetros**: 
-      - `nomeVersao` - Nome da versão bíblica (ex: acf, kjv, nvt)
+      - `nomeVersao` - Nome da versão bíblica (ex: acf, kjv, nvt, ara, nvi, ntlh)
       - `id_livro` - ID único do livro bíblico (ex: 1)
       - `capitulo` - Número do capítulo (ex: 1)
     - **Descrição**: Retorna versos de um capítulo específico em uma versão bíblica escolhida
-    - **Resposta (200)**:
+    - **Exemplo de Resposta**:
       ```json
       [
         {
@@ -199,7 +214,7 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
             "nome": "nvt"
           },
           "livro": {
-            "id": 0,
+            "id": 1,
             "nome": "Gênesis",
             "abreviacao": "gn",
             "testamento": {
@@ -219,11 +234,11 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
 - **Busca detalhada por nome de livro e versão**
     - **GET** `/livros/buscaDetalhada/{nomeVersao}/{livro}/{capitulo}`
     - **Parâmetros**: 
-      - `nomeVersao` - Nome da versão bíblica (ex: acf, kjv, nvt)
+      - `nomeVersao` - Nome da versão bíblica (ex: acf, kjv, nvt, ara, nvi, ntlh)
       - `livro` - Nome completo ou abreviação do livro (ex: Gênesis)
       - `capitulo` - Número do capítulo (ex: 1)
     - **Descrição**: Retorna versos de um capítulo específico buscando o livro pelo nome e escolhendo uma versão bíblica
-    - **Resposta (200)**:
+    - **Exemplo de Resposta**:
       ```json
       [
         {
@@ -233,7 +248,7 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
             "nome": "nvt"
           },
           "livro": {
-            "id": 0,
+            "id": 1,
             "nome": "Gênesis",
             "abreviacao": "gn",
             "testamento": {
@@ -255,7 +270,7 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
 - **Listar todos os versículos do dia**
     - **GET** `/versiculos/all`
     - **Descrição**: Retorna uma lista completa de todos os versículos do dia cadastrados no sistema
-    - **Resposta (200)**:
+    - **Exemplo de Resposta**: Array de versículos do dia ex:
       ```json
       [
         {
@@ -289,7 +304,7 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
     - **Parâmetros**: 
       - `id` - ID único do versículo do dia (ex: 1)
     - **Descrição**: Retorna um versículo específico do dia identificado por seu ID
-    - **Resposta (200)**:
+    - **Exemplo de Resposta**:
       ```json
       {
         "id": 1,
@@ -315,10 +330,10 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
         }
       }
       ```
-
 - **Criar novo versículo do dia**
     - **POST** `/versiculos`
     - **Descrição**: Cria um novo versículo do dia e o persiste no banco de dados
+    - **Resposta (201)**: Objeto do versículo do dia criado
     - **Corpo da Requisição**:
       ```json
       {
@@ -342,7 +357,7 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
             "nome": "NVT"
           },
           "livro": {
-            "id": 43,
+            "id": 44,
             "nome": "João",
             "abreviacao": "Jo",
             "testamento": {
@@ -353,12 +368,60 @@ Uma simples API desenvolvida com o propósito de fornecer acesso aos livros, cap
         }
       }
       ```
-
+      
+#### Versões Bíblicas - `/versoes`
+- **Listar todos as versões disponíveis**
+    - **GET** `/versoes/all`
+    - **Descrição**: Retorna uma lista completa de todas as versões cadastradas no sistema
+    - **Exemplo de Resposta**:
+      ```json
+        [
+            {
+            "id": 1,
+            "nome": "nvi"
+            },
+            {
+            "id": 2,
+            "nome": "nvt"
+            }
+        ]
+        ```
+      
+      - **Comparar Versículo entre todas as versões disponíveis no sistema**
+          - **GET** `/versoes/compare/{livro}/{capitulo}/{versiculo}`
+          - **Parâmetros**: 
+            - `livro` - Nome completo ou abreviação do livro (ex: Gênesis, Gn)
+            - `capitulo` - Número do capítulo (ex: 1)
+            - `versiculo` - Número do versículo (ex: 1)
+          - **Descrição**: Retorna os textos do versículo específico em todas as versões disponíveis
+          - **Exemplo de Resposta**:
+            ```json
+            {
+              "nomeLivro": "Gênesis",
+              "capitulo": 1,
+              "versiculo": 1,
+              "comparacoes": [
+                {
+                  "versao": "ara",
+                  "texto": "NO princípio criou Deus os céus e a terra."
+                },
+                {
+                  "versao": "nvt",
+                  "texto": "No princípio, criou Deus os céus e a terra."
+                },
+                {
+                  "versao": "nvi",
+                  "texto": "No princípio Deus criou os céus e a terra."
+                }
+             ]
+            }
+            ```
+      
 ## Documentação da API
 
 A documentação interativa da API está disponível via Swagger/OpenAPI:
 
-- **Swagger UI**: http://localhost:8080/swagger-ui.html
+- **Swagger UI**: http://localhost:8080/swagger-ui/index.html
 - **OpenAPI JSON**: http://localhost:8080/v3/api-docs
 
 

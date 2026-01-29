@@ -1,5 +1,6 @@
 package com.valdirsantos714.biblia.controllers;
 
+import com.valdirsantos714.biblia.dtos.VersosDTO;
 import com.valdirsantos714.biblia.entities.biblia.VersiculoDoDia;
 import com.valdirsantos714.biblia.services.VersiculosDoDiaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -46,6 +48,19 @@ public class VersiculoDoDiaController {
         VersiculoDoDia versiculoDoDia = versiculoDoDiaService.findById(id);
 
         return ResponseEntity.ok().body(versiculoDoDia);
+    }
+
+    @GetMapping(value = "/versiculoDoDia")
+    @Operation(summary = "Obter versículo aleatório do dia", description = "Retorna um versículo aleatório do dia (versão NVT) baseado na data atual. O mesmo versículo será retornado para toda a data, garantindo consistência")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Versículo aleatório do dia retornado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Nenhum versículo encontrado para o dia de hoje")
+    })
+    public ResponseEntity<VersosDTO> getVersiculoDoDia() {
+        LocalDate hoje = LocalDate.now();
+        VersosDTO verso = versiculoDoDiaService.findVersoAleatorioDoDia(hoje);
+
+        return ResponseEntity.ok().body(verso);
     }
 
     @PostMapping
